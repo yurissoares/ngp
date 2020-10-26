@@ -23,7 +23,6 @@ public class MarcaEntity implements Serializable {
 
 	private static final long serialVersionUID = 702051841961317525L;
 	
-	//Testar o @JsonInclude(Include.NON_NULL)
 	@JsonInclude(Include.NON_NULL)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
