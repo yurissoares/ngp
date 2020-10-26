@@ -2,6 +2,8 @@ package com.nativa.ngp.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nativa.ngp.entity.MarcaEntity;
+import com.nativa.ngp.dto.MarcaDto;
 import com.nativa.ngp.service.IMarcaService;
 
 @RestController
@@ -25,17 +27,17 @@ public class MarcaController {
 	private IMarcaService marcaService;
 
 	@GetMapping
-	public ResponseEntity<List<MarcaEntity>> listarMarcas() {
+	public ResponseEntity<List<MarcaDto>> listarMarcas() {
 		return ResponseEntity.status(HttpStatus.OK).body(this.marcaService.listar());
 	}
 	
 	@GetMapping("/{marcaId}")
-	public ResponseEntity<MarcaEntity> consultarMarca(@PathVariable Long marcaId) {
+	public ResponseEntity<MarcaDto> consultarMarca(@PathVariable Long marcaId) {
 		return ResponseEntity.status(HttpStatus.OK).body(this.marcaService.consultar(marcaId));
 	}
 	
 	@PostMapping
-	public ResponseEntity<Boolean> cadastrarMarca(@RequestBody MarcaEntity marca) {
+	public ResponseEntity<Boolean> cadastrarMarca(@Valid @RequestBody MarcaDto marca) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.marcaService.cadastrar(marca));
 	}
 	
@@ -45,7 +47,7 @@ public class MarcaController {
 	}
 
 	@PutMapping
-	public ResponseEntity<Boolean> atualizarMarca(@RequestBody MarcaEntity marca) {
+	public ResponseEntity<Boolean> atualizarMarca(@Valid @RequestBody MarcaDto marca) {
 		return ResponseEntity.status(HttpStatus.OK).body(this.marcaService.atualizar(marca));
 	}
 }

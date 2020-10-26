@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.nativa.ngp.dto.MarcaDto;
 import com.nativa.ngp.entity.MarcaEntity;
 import com.nativa.ngp.exception.MarcaException;
 import com.nativa.ngp.repository.IMarcaRepository;
@@ -19,14 +22,16 @@ public class MarcaService implements IMarcaService {
 	private IMarcaRepository marcaRepository;
 
 	@Override
-	public Boolean atualizar(MarcaEntity marca) {
+	public Boolean atualizar(MarcaDto marca) {
 		try {
-			MarcaEntity marcaEntityAtualizada = this.consultar(marca.getMarcaId());
-
-			marcaEntityAtualizada.setNome(marca.getNome());
+			this.consultar(marca.getMarcaId());
+			ModelMapper mapper = new ModelMapper();
+			MarcaEntity marcaEntityAtualizada = mapper.map(marca, MarcaEntity.class);
+			
 			this.marcaRepository.save(marcaEntityAtualizada);
-
+			
 			return true;
+
 		} catch (MarcaException m) {
 			throw m;
 		} catch (Exception e) {
@@ -48,13 +53,14 @@ public class MarcaService implements IMarcaService {
 	}
 
 	@Override
-	public MarcaEntity consultar(Long marcaId) {
+	public MarcaDto consultar(Long marcaId) {
 		try {
+			ModelMapper mapper = new ModelMapper();
 			Optional<MarcaEntity> marcaOptional = this.marcaRepository.findById(marcaId);
 			if (marcaOptional.isPresent()) {
-				return marcaOptional.get();
+				return mapper.map(marcaOptional.get(), MarcaDto.class);
 			}
-			throw new MarcaException("Matéria não encontrada", HttpStatus.NOT_FOUND);
+			throw new MarcaException("Marca não encontrada", HttpStatus.NOT_FOUND);
 		} catch (MarcaException m) {
 			throw m;
 		} catch (Exception e) {
@@ -63,18 +69,21 @@ public class MarcaService implements IMarcaService {
 	}
 
 	@Override
-	public List<MarcaEntity> listar() {
+	public List<MarcaDto> listar() {
 		try {
-			return this.marcaRepository.findAll();
+			ModelMapper mapper = new ModelMapper();
+			return mapper.map(this.marcaRepository.findAll(), new TypeToken<List<MarcaDto>>() {}.getType());
 		} catch (Exception e) {
 			return new ArrayList<>();
 		}
 	}
 
 	@Override
-	public Boolean cadastrar(MarcaEntity marca) {
+	public Boolean cadastrar(MarcaDto marca) {
 		try {
-			this.marcaRepository.save(marca);
+			ModelMapper mapper = new ModelMapper();
+			MarcaEntity marcaEntity = mapper.map(marca, MarcaEntity.class);
+			this.marcaRepository.save(marcaEntity);
 			return true;
 		} catch (Exception e) {
 			return false;
