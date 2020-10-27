@@ -8,4 +8,5 @@ import com.nativa.ngp.entity.MarcaEntity;
 @Repository
 public interface IMarcaRepository extends JpaRepository<MarcaEntity, Long> {
 
+	public boolean existsByNome(String nome);
 }
