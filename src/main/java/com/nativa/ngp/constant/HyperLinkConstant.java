@@ -6,9 +6,9 @@ import lombok.Getter;
 public enum HyperLinkConstant {
 	
 	ATUALIZAR("UPDATE"),
-	EXCLUIR("EXCLUIR"),
-	LISTAR("LISTAR"),
-	CONSULTAR("GET_ALL");
+	EXCLUIR("DELETE"),
+	LISTAR("GET_ALL"),
+	CONSULTAR("GET");
 	
 	private final String valor;
 	

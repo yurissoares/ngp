@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.nativa.ngp.exception.MarcaException;
+import com.nativa.ngp.exception.PatrimonioException;
 import com.nativa.ngp.model.Response;
 
 @ControllerAdvice
@@ -35,6 +36,14 @@ public class ResourceHandler {
 
 	@ExceptionHandler(MarcaException.class)
 	public ResponseEntity<Response<String>> handlerMarcaException(MarcaException m) {
+		Response<String> response = new Response<>();
+		response.setStatusCode(m.getHttpStatus().value());
+		response.setData(m.getMessage());
+		return ResponseEntity.status(m.getHttpStatus()).body(response);
+	}
+	
+	@ExceptionHandler(PatrimonioException.class)
+	public ResponseEntity<Response<String>> handlerPatrimonioException(PatrimonioException m) {
 		Response<String> response = new Response<>();
 		response.setStatusCode(m.getHttpStatus().value());
 		response.setData(m.getMessage());

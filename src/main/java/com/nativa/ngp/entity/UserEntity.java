@@ -4,12 +4,9 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -19,32 +16,29 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "tb_patrimonio")
+@Table(name = "tb_user")
 @Data
 @NoArgsConstructor
-public class PatrimonioEntity implements Serializable {
+public class UserEntity implements Serializable {
 
-	private static final long serialVersionUID = 6078331721770190969L;
-	
+	private static final long serialVersionUID = -4431674448259205673L;
+
 	@JsonInclude(Include.NON_NULL)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="patrimonio_id")
-	private Long patrimonioId;
+	@Column(name="user_id")
+	private Long userId;
 	
 	@JsonInclude(Include.NON_EMPTY)
 	@Column(name="nome")
 	private String nome;
 	
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="marca_id", referencedColumnName = "marca_id")
-	private MarcaEntity marca;
+	@JsonInclude(Include.NON_EMPTY)
+	@Column(name="email")
+	private String email;
 	
-	@Column(name="descricao")
-	private String descricao;
+	@JsonInclude(Include.NON_EMPTY)
+	@Column(name="senha")
+	private String senha;
 	
-	@Column(name="num_tombo")
-	private String numTombo;
-	
-
 }
