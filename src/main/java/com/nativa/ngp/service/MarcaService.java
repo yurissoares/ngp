@@ -40,7 +40,15 @@ public class MarcaService implements IMarcaService {
 	public Boolean atualizar(MarcaDto marca) {
 		try {
 			this.consultar(marca.getMarcaId());
-			this.verificarNomeExistente(marca.getNome());
+			
+			Optional<MarcaEntity> marcaOptional = this.marcaRepository.findByNome(marca.getNome());
+			
+			if(marcaOptional.isPresent()) {
+				if(marcaOptional.get().getMarcaId() != marca.getMarcaId()) {
+					throw new MarcaException("Esse nome de marca já existe.", HttpStatus.BAD_REQUEST);				
+				}
+			}
+			
 			MarcaEntity marcaEntityAtualizada = this.mapper.map(marca, MarcaEntity.class);
 			this.marcaRepository.save(marcaEntityAtualizada);
 			return Boolean.TRUE;

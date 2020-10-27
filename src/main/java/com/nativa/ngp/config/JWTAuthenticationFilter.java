@@ -16,10 +16,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.org.apache.xml.internal.security.algorithms.SignatureAlgorithm;
-import com.ufrb.lardosidosos.domain.model.Usuario;
+import com.nativa.ngp.entity.UserEntity;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -35,10 +35,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			throws AuthenticationException {
 
 		try {
-			Usuario usuario = new ObjectMapper().readValue(request.getInputStream(), Usuario.class);
-			return this.authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(usuario.getNomeResumido(), usuario.getSenha()));
-		} catch (Exception e) {
+			UserEntity user = new ObjectMapper().readValue(request.getInputStream(), UserEntity.class);
+			return this.authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getSenha()));
+		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -49,7 +49,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String username = ((User) authResult.getPrincipal()).getUsername();
 		String token = Jwts.builder().setSubject(username)
 				.setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-				.signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET).compact();
+				.signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET)
+				.compact();
 
 		String bearerToken = SecurityConstants.TOKEN_PREFIX + token;
 		response.getWriter().write(bearerToken);

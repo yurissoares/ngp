@@ -13,17 +13,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import com.ufrb.lardosidosos.domain.service.CustomUsuarioDetailService;
+import com.nativa.ngp.service.CustomUserDetailService;
 
 import io.jsonwebtoken.Jwts;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
-	private final CustomUsuarioDetailService customUsuarioDetailService;
+	private final CustomUserDetailService customUserDetailService;
 	
-	public JWTAuthorizationFilter(AuthenticationManager authenticationManager, CustomUsuarioDetailService customUsuarioDetailService) {
+	public JWTAuthorizationFilter(AuthenticationManager authenticationManager, CustomUserDetailService customUserDetailService) {
 		super(authenticationManager);
-		this.customUsuarioDetailService = customUsuarioDetailService;
+		this.customUserDetailService = customUserDetailService;
 	}
 	
 	@Override
@@ -49,7 +49,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 				.parseClaimsJws(token.replace(SecurityConstants.TOKEN_PREFIX, ""))
 				.getBody()
 				.getSubject();
-		UserDetails userDetails = customUsuarioDetailService.loadUserByUsername(username);
+		UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
 		return username != null ? new UsernamePasswordAuthenticationToken(username, null, userDetails.getAuthorities()) : null;
 	}
 }

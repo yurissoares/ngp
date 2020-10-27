@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ public class PatrimonioController {
 	private IPatrimonioService patrimonioService;
 
 	@GetMapping
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Response<List<PatrimonioDto>>> listarPatrimonios() {
 		Response<List<PatrimonioDto>> response = new Response<>();
 		response.setData(this.patrimonioService.listar());
@@ -38,6 +40,7 @@ public class PatrimonioController {
 	}
 
 	@GetMapping("/{patrimonioId}")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Response<PatrimonioDto>> consultarPatrimonio(@PathVariable Long patrimonioId) {
 		Response<PatrimonioDto> response = new Response<>();
 		PatrimonioDto patrimonio = this.patrimonioService.consultar(patrimonioId);
@@ -54,6 +57,7 @@ public class PatrimonioController {
 	}
 
 	@PostMapping
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Response<Boolean>> cadastrarPatrimonio(@Valid @RequestBody PatrimonioDto patrimonio) {
 		Response<Boolean> response = new Response<>();
 		response.setData(this.patrimonioService.cadastrar(patrimonio));
@@ -65,6 +69,7 @@ public class PatrimonioController {
 	}
 
 	@DeleteMapping("/{patrimonioId}")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Response<Boolean>> excluirPatrimonio(@PathVariable Long patrimonioId) {
 		Response<Boolean> response = new Response<>();
 		response.setData(this.patrimonioService.excluir(patrimonioId));
@@ -76,6 +81,7 @@ public class PatrimonioController {
 	}
 
 	@PutMapping
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Response<Boolean>> atualizarPatrimonio(@Valid @RequestBody PatrimonioDto patrimonio) {
 		Response<Boolean> response = new Response<>();
 		response.setData(this.patrimonioService.atualizar(patrimonio));

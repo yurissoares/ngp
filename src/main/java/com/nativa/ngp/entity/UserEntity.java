@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "tb_user")
 @Data
 @NoArgsConstructor
-public class UserEntity implements Serializable {
+public class UserEntity implements Serializable  {
 
 	private static final long serialVersionUID = -4431674448259205673L;
 

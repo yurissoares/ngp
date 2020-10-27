@@ -19,64 +19,63 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nativa.ngp.constant.HyperLinkConstant;
-import com.nativa.ngp.dto.MarcaDto;
+import com.nativa.ngp.dto.UserDto;
 import com.nativa.ngp.model.Response;
-import com.nativa.ngp.service.IMarcaService;
+import com.nativa.ngp.service.IUserService;
 
 @RestController
-@RequestMapping("/marca")
-public class MarcaController {
+@RequestMapping("/user")
+public class UserController {
 
 	@Autowired
-	private IMarcaService marcaService;
+	private IUserService userService;
 
 	@GetMapping
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<Response<List<MarcaDto>>> listarMarcas() {
-		Response<List<MarcaDto>> response = new Response<>();
-		response.setData(this.marcaService.listar());
+	public ResponseEntity<Response<List<UserDto>>> listarUsers() {
+		Response<List<UserDto>> response = new Response<>();
+		response.setData(this.userService.listar());
 		response.setStatusCode(HttpStatus.OK.value());
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
-	@GetMapping("/{marcaId}")
+	@GetMapping("/{userId}")
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<Response<MarcaDto>> consultarMarca(@PathVariable Long marcaId) {
-		Response<MarcaDto> response = new Response<>();
-		MarcaDto marca = this.marcaService.consultar(marcaId);
-		response.setData(marca);
+	public ResponseEntity<Response<UserDto>> consultarUser(@PathVariable Long userId) {
+		Response<UserDto> response = new Response<>();
+		UserDto user = this.userService.consultar(userId);
+		response.setData(user);
 		response.setStatusCode(HttpStatus.OK.value());
-		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MarcaController.class).consultarMarca(marcaId))
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).consultarUser(userId))
 				.withSelfRel());
-		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MarcaController.class).excluirMarca(marcaId))
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).excluirUser(userId))
 				.withRel(HyperLinkConstant.EXCLUIR.getValor()));
-		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MarcaController.class).atualizarMarca(marca))
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).atualizarUser(user))
 				.withRel(HyperLinkConstant.ATUALIZAR.getValor()));
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
 	@PostMapping
-	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<Response<Boolean>> cadastrarMarca(@Valid @RequestBody MarcaDto marca) {
+	public ResponseEntity<Response<Boolean>> cadastrarUser(@Valid @RequestBody UserDto user) {
 		Response<Boolean> response = new Response<>();
-		response.setData(this.marcaService.cadastrar(marca));
+		response.setData(this.userService.cadastrar(user));
 		response.setStatusCode(HttpStatus.CREATED.value());
-		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MarcaController.class).atualizarMarca(marca))
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).atualizarUser(user))
 				.withRel(HyperLinkConstant.ATUALIZAR.getValor()));
-		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MarcaController.class).listarMarcas())
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).listarUsers())
 				.withRel(HyperLinkConstant.LISTAR.getValor()));
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
-	@DeleteMapping("/{marcaId}")
+	@DeleteMapping("/{userId}")
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<Response<Boolean>> excluirMarca(@PathVariable Long marcaId) {
+	public ResponseEntity<Response<Boolean>> excluirUser(@PathVariable Long userId) {
 		Response<Boolean> response = new Response<>();
-		response.setData(this.marcaService.excluir(marcaId));
+		response.setData(this.userService.excluir(userId));
 		response.setStatusCode(HttpStatus.OK.value());
-		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MarcaController.class).listarMarcas())
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).listarUsers())
 				.withRel(HyperLinkConstant.LISTAR.getValor()));
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -84,11 +83,11 @@ public class MarcaController {
 
 	@PutMapping
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<Response<Boolean>> atualizarMarca(@Valid @RequestBody MarcaDto marca) {
+	public ResponseEntity<Response<Boolean>> atualizarUser(@Valid @RequestBody UserDto user) {
 		Response<Boolean> response = new Response<>();
-		response.setData(this.marcaService.atualizar(marca));
+		response.setData(this.userService.atualizar(user));
 		response.setStatusCode(HttpStatus.OK.value());
-		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MarcaController.class).listarMarcas())
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).listarUsers())
 				.withRel(HyperLinkConstant.LISTAR.getValor()));
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);

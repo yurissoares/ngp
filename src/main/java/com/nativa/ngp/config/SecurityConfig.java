@@ -10,22 +10,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 
+import com.nativa.ngp.service.CustomUserDetailService;
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-	private CustomUsuarioDetailService customUsuarioDetailService;
-	
-//	@Override
-//	protected void configure(HttpSecurity http) throws Exception {
-//		http.authorizeRequests()
-//			.anyRequest().authenticated()
-//			.and()
-//			.httpBasic()
-//			.and()
-//			.csrf().disable();
-//	}
+	private CustomUserDetailService customUserDetailService;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -36,12 +28,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.GET, SecurityConstants.SIGN_UP_URL).permitAll()
 			.and()
 			.addFilter(new JWTAuthenticationFilter(authenticationManager()))
-			.addFilter(new JWTAuthorizationFilter(authenticationManager(), customUsuarioDetailService));
+			.addFilter(new JWTAuthorizationFilter(authenticationManager(), customUserDetailService));
 	
 	}
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(customUsuarioDetailService).passwordEncoder(new BCryptPasswordEncoder());
+		auth.userDetailsService(customUserDetailService).passwordEncoder(new BCryptPasswordEncoder());
 	}
 }
