@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nativa.ngp.constant.HyperLinkConstant;
 import com.nativa.ngp.dto.MarcaDto;
 import com.nativa.ngp.model.Response;
 import com.nativa.ngp.service.IMarcaService;
@@ -24,10 +25,6 @@ import com.nativa.ngp.service.IMarcaService;
 @RestController
 @RequestMapping("/marca")
 public class MarcaController {
-	
-	private static final String DELETE = "DELETE";
-	private static final String UPDATE = "UPDATE";
-	private static final String LIST = "GET_ALL";
 
 	@Autowired
 	private IMarcaService marcaService;
@@ -49,9 +46,9 @@ public class MarcaController {
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MarcaController.class).consultarMarca(marcaId))
 				.withSelfRel());
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MarcaController.class).excluirMarca(marcaId))
-				.withRel(DELETE));
+				.withRel(HyperLinkConstant.EXCLUIR.getValor()));
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MarcaController.class).atualizarMarca(marca))
-				.withRel(UPDATE));
+				.withRel(HyperLinkConstant.ATUALIZAR.getValor()));
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
@@ -62,9 +59,9 @@ public class MarcaController {
 		response.setData(this.marcaService.cadastrar(marca));
 		response.setStatusCode(HttpStatus.CREATED.value());
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MarcaController.class).atualizarMarca(marca))
-				.withRel(UPDATE));
+				.withRel(HyperLinkConstant.ATUALIZAR.getValor()));
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MarcaController.class).listarMarcas())
-				.withRel(LIST));
+				.withRel(HyperLinkConstant.LISTAR.getValor()));
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
@@ -75,7 +72,7 @@ public class MarcaController {
 		response.setData(this.marcaService.excluir(marcaId));
 		response.setStatusCode(HttpStatus.OK.value());
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MarcaController.class).listarMarcas())
-				.withRel(LIST));
+				.withRel(HyperLinkConstant.LISTAR.getValor()));
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
@@ -86,7 +83,7 @@ public class MarcaController {
 		response.setData(this.marcaService.atualizar(marca));
 		response.setStatusCode(HttpStatus.OK.value());
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MarcaController.class).listarMarcas())
-				.withRel(LIST));
+				.withRel(HyperLinkConstant.LISTAR.getValor()));
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
