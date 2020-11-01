@@ -1,5 +1,5 @@
 # ngp
-Projeto de uma WEB Api Rest da empresa Nativa Gerencimento de Patrimônios
+Projeto de uma WEB Api Rest de uma empresa de Gerencimento de Patrimônios
 
 Para solução do desafio eu optei por usar o Spring Boot na construção da API Rest.
 Optei pelo Spring pela familiaridade com o framework e agilidade que eles nos dá. Usei o git para controle do repositório, foram criados 4 branches:

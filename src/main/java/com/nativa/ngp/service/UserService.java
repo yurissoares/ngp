@@ -42,10 +42,8 @@ public class UserService implements IUserService {
 		try {
 			this.consultar(user.getUserId());
 			Optional<UserEntity> userOptional = this.userRepository.findByEmail(user.getEmail());
-			if (userOptional.isPresent()) {
-				if (userOptional.get().getUserId() != user.getUserId()) {
-					throw new UserException("Esse email já existe.", HttpStatus.BAD_REQUEST);
-				}
+			if (userOptional.isPresent() && userOptional.get().getUserId() != user.getUserId()) {
+				throw new UserException("Esse email já existe.", HttpStatus.BAD_REQUEST);
 			}
 			UserEntity userEntityAtualizada = this.mapper.map(user, UserEntity.class);
 			userEntityAtualizada.setSenha(new BCryptPasswordEncoder().encode(user.getSenha()));
